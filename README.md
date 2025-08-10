@@ -1,4 +1,4 @@
-# Local Network Scanner (Round 1)
+# Local Network Scanner
 
 A lightweight, **async TCP port scanner** for your local network.  
 Scans a CIDR (e.g. `192.168.1.0/24`), identifies **live hosts** (any open port), lists open **common ports**, and can export results to CSV.
