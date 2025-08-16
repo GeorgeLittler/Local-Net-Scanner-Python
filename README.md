@@ -1,38 +1,32 @@
 # Local Network Scanner
 
-A lightweight, **async TCP port scanner** for your local network.  
-Scans a CIDR (e.g. `192.168.1.0/24`), identifies **live hosts** (any open port), lists open **common ports**, and can export results to CSV.
+A lightweight, **async TCP port scanner** for local networks.
 
 > **Use responsibly.** Only scan networks you own or have explicit permission to test.
 
-**Round 1 delivers**
-- CIDR scan (e.g. `/24`)
-- Async TCP connect scans (fast)
-- Common ports by default (`22, 80, 443, 3389, 8080, 53, 445, 139, 3306, 5432, 8000`)
-- CSV export
+## Features
 
-**Planned for Round 2**
-- Banner grabbing (simple service guess)
-- Auto-detect local CIDR (e.g. via `netifaces`)
-- Larger default port sets / presets
-- Pretty HTML report
-- Retry/backoff and progress bar
+- **CIDR scan** (e.g. `192.168.1.0/24`)
+- **Auto CIDR detection**: `--auto` (Windows/macOS/Linux via system tooling)
+- **Fast async** TCP connect scans with configurable **concurrency** & **timeout**
+- **Port presets**: `--preset common|web|db|remote|smb|all-1-1024` or custom `--ports`
+- **Optional service guessing**: `--guess` (HTTP `HEAD` / tiny passive banners)
+- **Reports**: CSV (`host,port,service_guess`) and pretty **HTML**
+- **Progress bar** and **retry/backoff** for borderline timeouts
+- **Stdlib only** (no external dependencies)
 
----
+## Quick start
 
-## Run Locally + Examples
 ```bash
-# 1) Create and activate venv (optional)
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+# Auto-detect your local CIDR and scan common ports, with guesses, CSV and HTML outputs:
+python scanner.py --auto --preset common --guess --csv scan.csv --html scan.html
 
-# 2) No extra deps (stdlib only)
+# Manual CIDR with a custom port range:
+python scanner.py --cidr 192.168.1.0/24 --ports 1-1024 --concurrency 1024 --timeout 0.3
+```
 
-# 3) Run a quick scan over a /24 (common ports)
-python scanner.py --cidr 192.168.1.0/24
+## Notes
 
-# 4) Custom ports and CSV export
-python scanner.py --cidr 192.168.1.0/24 --ports 22,80,443,8080 --csv results.csv
-
-# 5) Port ranges and higher concurrency
-python scanner.py --cidr 10.0.0.0/24 --ports 1-1024 --concurrency 1024 --timeout 0.3
+- Auto-detection is best-effort; if it fails, pass --cidr explicitly.
+- Service guessing is heuristic. TLS services are labelled tls? (no TLS handshake).
+- Press Ctrl-C any time; partial findings are retained for reporting.
