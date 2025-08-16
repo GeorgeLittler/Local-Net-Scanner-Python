@@ -1,6 +1,8 @@
 # Local Network Scanner
 
-A lightweight, **async TCP port scanner** for local networks.
+A lightweight Python tool that scans a local subnet for active devices and open ports using fast asynchronous TCP connections.  
+It can auto-dtect your local CIDR, guess common services from banners, and export results to both CSV and HTML reports.  
+There are noo external dependencies and it's built with the Python standard library.
 
 > **Use responsibly.** Only scan networks you own or have explicit permission to test.
 
@@ -23,6 +25,16 @@ python scanner.py --auto --preset common --guess --csv scan.csv --html scan.html
 
 # Manual CIDR with a custom port range:
 python scanner.py --cidr 192.168.1.0/24 --ports 1-1024 --concurrency 1024 --timeout 0.3
+```
+
+## Example output
+
+```bash
+$ python3 scanner.py --cidr 127.0.0.1/32 --ports 8080 --guess
+[i] Scanning 127.0.0.1/32 on 1 ports (timeout=0.5s, concurrency=512, guess=on)
+
+=== Summary ===
+127.0.0.1: 8080 (HTTP/1.0 200 OK Server: SimpleHTTP/0.6 Python/3.12.3)
 ```
 
 ## Notes
